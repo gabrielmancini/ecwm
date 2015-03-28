@@ -1,0 +1,15 @@
+{
+  "name": "wallmart",
+  "version": "1.0.0",
+  "description": "spfa",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "gabriel.mancini@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "couchr": "0.0.16",
+    "hapi": "^8.4.0"
+  }
+}
