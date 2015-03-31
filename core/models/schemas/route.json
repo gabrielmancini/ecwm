@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "/",
+  "type": "object",
+  "properties": {
+    "_id": {
+      "id": "_id",
+      "type": "string"
+    },
+    "_rev": {
+      "id": "_rev",
+      "type": "string"
+    },
+    "type": {
+      "id": "type",
+      "type": "string",
+      "default": "route"
+    },
+    "from": {
+      "id": "from",
+      "type": "string",
+      "default": "A"
+    },
+    "to": {
+      "id": "to",
+      "type": "string",
+      "default": "B"
+    },
+    "km": {
+      "id": "km",
+      "type": "integer",
+      "default": 10
+    },
+    "createAt": {
+      "id": "createAt",
+      "type": "string",
+      "format": "date-time"
+    },
+    "createBy": {
+      "id": "createBy",
+      "type": "string",
+      "default": "user1"
+    },
+    "updateAt": {
+      "id": "updateAt",
+      "type": "string",
+      "format": "date-time"
+    },
+    "updateBy": {
+      "id": "updateBy",
+      "type": "string",
+      "default": "user1"
+    }
+  },
+  "required": [
+    "from",
+    "to",
+    "km",
+    "createAt",
+    "updateAt"
+  ]
+}

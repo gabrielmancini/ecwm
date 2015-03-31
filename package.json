@@ -4,13 +4,28 @@
   "description": "spfa",
   "main": "index.js",
   "scripts": {
-    "test": "npm test",
-    "start": "node index.js"
+    "test": "mocha test",
+    "start": "node bin/start --custom-ports 6001,6003 -v"
   },
   "author": "gabriel.mancini@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "JSONStream": "^0.10.0",
+    "async": "^0.9.0",
+    "bluebird": "^2.9.21",
     "couchr": "0.0.16",
-    "hapi": "^8.4.0"
+    "csv-streamify": "^1.0.0",
+    "hapi": "^8.4.0",
+    "iconv-lite": "^0.4.7",
+    "lodash": "^3.6.0",
+    "lout": "^6.2.1",
+    "moment": "^2.9.0",
+    "multicouch": "^0.8.2",
+    "optimist": "^0.6.1",
+    "requireindex": "^1.1.0",
+    "tv4": "^1.1.9"
+  },
+  "devDependencies": {
+    "should": "^5.2.0"
   }
 }
