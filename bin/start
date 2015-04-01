@@ -18,6 +18,7 @@ var argv = require('optimist')
   .argv;
 
 app.start(argv, function (err) {
+  console.log(arguments);
   if (err) {
     process.exit(1);
   }
