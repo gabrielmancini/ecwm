@@ -2,16 +2,15 @@
 var stream = require('stream');
 var transform = new stream.Transform( { objectMode: true } );
 
-module.exports = function (attrs) {
-
+module.exports = function (model, attrs, base) {
 
   function _transform(self, line) {
     var obj = line.reduce(function (a, c, i) {
       a[attrs[i] || c] = c;
       return a;
-    }, {});
+    }, base);
 
-   self.push(obj);
+    self.push(new model(obj));
   };
 
   transform._transform = function (line, encoding, done) {

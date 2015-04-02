@@ -28,8 +28,7 @@
     },
     "km": {
       "id": "km",
-      "type": "integer",
-      "default": 10
+      "type": "integer"
     },
     "createAt": {
       "id": "createAt",

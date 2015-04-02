@@ -2,30 +2,27 @@
 var stream = require('stream');
 var transform = new stream.Transform( { objectMode: true } );
 
-module.exports = function (attrs) {
-  transform._transform = function (line, encoding, done) {
+module.exports = function (model, attrs) {
+  transform._transform = function (obj, encoding, done) {
 
-    var obj = line.reduce(function (a, c, i) {
-      a[attrs[i] || c] = c;
-      return a;
-    }, {});
+debugger;
+    obj.validate();
 
-   this.push(obj);
+    this.push(obj.data);
 
-   done();
+    done();
   }
 
   transform._flush = function (done) {
+
     if (this._lastLineData) {
-      var obj = this._lastLineData.reduce(function (a, c, i) {
-        a[attrs[i] || c] = c;
-        return a;
-      }, {});
-      this.push(obj);
+      obj.validate();
+
+      this.push(obj.data);
     }
 
-   this._lastLineData = null;
-   done();
+    this._lastLineData = null;
+    done();
   }
 
   return transform;
