@@ -10,10 +10,7 @@
   "author": "gabriel.mancini@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "JSONStream": "^0.10.0",
     "async": "^0.9.0",
-    "bluebird": "^2.9.21",
-    "couchr": "0.0.16",
     "csv-streamify": "^1.0.0",
     "fast-csv": "^0.6.0",
     "hapi": "^8.4.0",
