@@ -19,11 +19,11 @@ var opt = {
 
 module.exports = function () {
   var parse = new csv.parse(opt);
-  parse
-    .on("data", function(data) {
-      console.log(data);
-      console.log('-----------')
-    });
+//  parse
+//    .on("data", function(data) {
+//      console.log(data);
+//      console.log('-----------')
+//    });
 //    .on("end", function() {
 //      console.log('end', arguments);
 //      return parse.end();

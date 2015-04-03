@@ -27,14 +27,16 @@ module.exports = function (env_config) {
         },
       },
       handler: function handler(request, reply) {
-        debugger;
         var payload = request.payload;
         var parameter = JSON.parse(payload.parameter);
+        if (!(parameter && parameter.file)) {
+          return reply('parameter json not found: parameter={"file": "fileInput"} where fileInput is as input multipart/form-data' );
+        }
         file = payload[parameter.file];
 
         var base = {
           type: 'route',
-          origin: parameter.name
+          origin: parameter.file
         }
         var attrs = ['from', 'to', 'km'];
 
@@ -48,13 +50,13 @@ module.exports = function (env_config) {
             .pipe(Stream.writer(env_config));
           file
             .on('end', function (){
-              reply({"Status":"Done"});
+              return reply({"Status":"Done"});
             })
             .on('error', function (){
-              reply('Error in uploading');
+              return reply('Error in uploading');
             });
         } else {
-          reply('file not found: ' + parameter.file );
+          return reply('file not found: ' + parameter.file );
         }
 
       }

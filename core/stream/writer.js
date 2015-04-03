@@ -15,7 +15,6 @@ module.exports = function (env_config) {
       var toSend = buffer.splice(0, buffer.length);
       buffer = [];
       var db = nano.use(env_config.db);
-      console.log(toSend);
       db.bulk({docs: toSend} , function(err, data) {
         written += toSend.length;
         console.log("Written", toSend.length, " (",written,")");
