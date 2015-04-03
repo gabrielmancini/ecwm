@@ -1,9 +1,9 @@
 // stolen from http://strongloop.com/strongblog/practical-examples-of-the-new-node-js-streams-api/
 var stream = require('stream');
-var liner = new stream.PassThrough( { objectMode: true } );
 
 module.exports = function (newLine) {
 
+  var liner = new stream.PassThrough( { objectMode: true } );
   liner._transform = function (chunk, encoding, done) {
      var data = chunk.toString();
      if (this._lastLineData) {
@@ -26,5 +26,14 @@ module.exports = function (newLine) {
      this._lastLineData = null;
      done();
   }
+
+  liner
+    .on('end', function () {
+      console.log('liner end:', arguments);
+    })
+    .on('error', function (err){
+      console.log('liner err: ',err);
+    });
+
   return liner;
 }

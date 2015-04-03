@@ -26,37 +26,35 @@ module.exports = function (env_config) {
           parse: true
         },
       },
-      handler: function (request, reply) {
+      handler: function handler(request, reply) {
         debugger;
         var payload = request.payload;
         var parameter = JSON.parse(payload.parameter);
         file = payload[parameter.file];
 
+        var base = {
+          type: 'route',
+          origin: parameter.name
+        }
+        var attrs = ['from', 'to', 'km'];
+
         if (file) {
-
-
-          console.log(file)
-
-          var base = {
-            type: 'route',
-            origin: parameter.name
-          }
-          var attrs = ['from', 'to', 'km'];
-
-          var PassThrough = new stream.PassThrough( { objectMode: true } );
-          PassThrough
-            .wrap(file)
-            .pipe(Stream.liner('\n'))
-            .pipe(Stream.objectifier(' '))
-            .pipe(Stream.transform_2(Model.Models.Route, attrs, base))
-            .pipe(Stream.validate_2(Model.Models.Route))
-            .pipe(Stream.writer_2(env_config));
-
-          PassThrough.on('end', function(){
-            reply({"Status":"Done"});
-          }).on('error', function(){
-            reply('Error in uploading');
-          });
+          file
+//            .pipe(Stream.liner('\n'))
+//            .pipe(Stream.objectifier(' '))
+            .pipe(Stream.parser())
+            .pipe(Stream.transform(Model.Models.Route, attrs, base))
+            .pipe(Stream.validate(Model.Models.Route))
+            .pipe(Stream.writer(env_config));
+          file
+            .on('end', function (){
+              reply({"Status":"Done"});
+            })
+            .on('error', function (){
+              reply('Error in uploading');
+            });
+        } else {
+          reply('file not found: ' + parameter.file );
         }
 
       }

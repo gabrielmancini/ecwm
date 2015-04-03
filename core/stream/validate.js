@@ -1,11 +1,11 @@
 // stolen from http://strongloop.com/strongblog/practical-examples-of-the-new-node-js-streams-api/
 var stream = require('stream');
-var transform = new stream.PassThrough( { objectMode: true } );
 
 module.exports = function (model, attrs) {
-  var i = 0;
-  transform._transform = function (obj, encoding, done) {
-    console.log('V',i++);
+  var validate = new stream.Transform( { objectMode: true } );
+
+  validate._transform = function (obj, encoding, done) {
+
     obj.validate();
 
     this.push(obj.data);
@@ -13,7 +13,14 @@ module.exports = function (model, attrs) {
     done();
   }
 
+  validate
+    .on('end', function () {
+      console.log('validate end:', arguments);
+    })
+    .on('error', function (err){
+      console.log('validate err: ',err);
+    });
 
-  return transform;
+  return validate;
 
 }
