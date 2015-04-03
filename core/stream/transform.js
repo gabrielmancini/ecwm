@@ -1,32 +1,22 @@
+
 // stolen from http://strongloop.com/strongblog/practical-examples-of-the-new-node-js-streams-api/
 var stream = require('stream');
-var transform = new stream.Transform( { objectMode: true } );
+var transform = new stream.PassThrough( { objectMode: true } );
 
 module.exports = function (model, attrs, base) {
+var i = 0;
+  transform._transform = function (array, encoding, done) {
 
-  function _transform(self, line) {
-    var obj = line.reduce(function (a, c, i) {
-      a[attrs[i] || c] = c;
+    console.log('T',array);
+
+    var obj = array.reduce(function (a, c, i) {
+      a[attrs[i] || c] = (isNaN(c)) ? c : Number(c);
       return a;
     }, base);
 
-    self.push(new model(obj));
-  };
-
-  transform._transform = function (line, encoding, done) {
-
-    _transform(this, line);
+    this.push(new model(obj));
 
     done();
-  };
-
-  transform._flush = function (done) {
-    if (this._lastLineData) {
-       _transform(this, this._lastLineData);
-    }
-
-   this._lastLineData = null;
-   done();
   };
 
   return transform;

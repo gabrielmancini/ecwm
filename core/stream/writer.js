@@ -1,50 +1,23 @@
-var stream = require('stream'),
-  Cloudant = require('../cloudant'),
-  buffer = [ ],
-  BUFFER_MAX_SIZE = 500,
-  written = 0;
+var stream = require('stream');
+var writer = new stream.PassThrough( { objectMode: true }  );
+var Nano = require('nano');
 
-module.exports = function (env_config, db) {
+module.exports = function (env_config) {
 
-  cloudant = Cloudant(env_config);
-  // write the contents of the buffer to CouchDB in blocks of 500
-  var processBuffer = function(flush, callback) {
-
-    if(flush || buffer.length>= BUFFER_MAX_SIZE) {
-      var toSend = buffer.splice(0, buffer.length);
-      buffer = [];
-      console.log(toSend);
-      cloudant.bulk_write(toSend, db, function(err, data) {
-        written += toSend.length;
-        console.log("Written", toSend.length, " (",written,")");
-        callback();
-      });
-    } else {
-      callback();
-    }
-  }
-
-  var writer = new stream.Transform( { objectMode: true } );
+  var nano = Nano( { url: env_config.couch.url } );
 
   // take an object
+  var i = 0;
   writer._transform = function (obj, encoding, done) {
 
-    // add to the buffer
-    buffer.push(obj);
-
-    // optionally write to the buffer
-    processBuffer(false,  function() {
+    console.log('W',i++);
+    var db = nano.use(env_config.db);
+    db.insert(obj.data , function(err, data) {
+      //console.log("Written", " (",obj,")");
       done();
     });
 
   };
-
-  // called when we need to flush everything
-  writer._flush = function(done) {
-    processBuffer(true, function() {
-      done();
-    })
-  }
 
   return writer;
 }

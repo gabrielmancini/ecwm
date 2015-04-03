@@ -7,7 +7,6 @@ function Base(json) {
   this.data = {
     createAt: moment().toJSON(),
     updateAt: moment().toJSON(),
-    validationError: null
   };
   this.validationError = null;
 
@@ -16,8 +15,10 @@ function Base(json) {
 };
 
 Base.prototype.validate = function () {
-  this.data.validationError = tv4.validateMultiple(this.data, this.schema);
-  return this.data.validationError.valid;
+  var validationError = tv4.validateMultiple(this.data, this.schema);
+  if (!validationError.valid)
+    this.data.validationError = tv4.validateMultiple(this.data, this.schema);
+  return validationError.valid;
 };
 
 module.exports = exports = Base;

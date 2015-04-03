@@ -1,4 +1,4 @@
-var csv = require("fast-csv");
+var csv = require('csv-streamify');
 
 var opt = {
   delimiter: ' ', // comma, semicolon, whatever
@@ -16,18 +16,11 @@ var opt = {
   columns: false
 }
 
-
+// AND/OR
 module.exports = function () {
-  var parse = new csv.parse(opt);
-  parse
-    .on("data", function(data) {
-      console.log(data);
-      console.log('-----------')
-    });
-//    .on("end", function() {
-//      console.log('end', arguments);
-//      return parse.end();
-//    });
-
-  return parse;
-}
+  function callback(err, doc) {
+    if (err) return console.log('error on csv-streamify: ',err, doc);
+    return doc;
+  }
+  return csv(opt, callback);
+};
