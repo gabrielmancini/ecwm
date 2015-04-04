@@ -20,7 +20,19 @@ module.exports = {
       }
     },
     reduce: function (key, value, rereduce) {
-      return value;
+      if (!rereduce) {
+        return  value
+          .reduce(function (a, c) {
+            a[c._id] = c.km;
+            return a;
+          }, {});
+      } else {
+        return value
+          .reduce(function (a, c) {
+            for (var attrname in c) { a[attrname] = c[attrname]; }
+            return a;
+          }, {});
+      }
     }
   },
   incoming: {
