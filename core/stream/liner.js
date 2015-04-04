@@ -25,15 +25,7 @@ module.exports = function (newLine) {
      }
      this._lastLineData = null;
      done();
-  }
-
-  liner
-    .on('end', function () {
-      console.log('liner end:', arguments);
-    })
-    .on('error', function (err){
-      console.log('liner err: ',err);
-    });
+  };
 
   return liner;
 }

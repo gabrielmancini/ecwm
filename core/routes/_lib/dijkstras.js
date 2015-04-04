@@ -4,6 +4,7 @@ https://github.com/mburst/dijkstras-algorithm/blob/master/dijkstras.js
 */
 
 var stream = require('stream');
+var graph = require('./graph');
 module.exports = function (start, finish) {
 
   var passThrough = new stream.PassThrough( { objectMode: true } );
@@ -12,157 +13,21 @@ module.exports = function (start, finish) {
       previous = {},
       path = [],
       smallest, vertex, neighbor, alt
-  path.push(start);
-  passThrough._transform = function (smallest, encoding, done) {
+      path.push(start);
 
-    console.log(smallest)
-
-    if(smallest === finish) {
-      path;
-
-      while(previous[smallest]) {
-        path.push(smallest);
-        smallest = previous[smallest];
-      }
-
-      done();
-    }
-
-    //if(!smallest || distances[smallest] === INFINITY){
-    //  continue;
-    //}
-
-    for(neighbor in this.vertices[smallest]) {
-      alt = distances[smallest] + this.vertices[smallest][neighbor];
-
-      if(alt < distances[neighbor]) {
-        distances[neighbor] = alt;
-        previous[neighbor] = smallest;
-
-        nodes.enqueue(alt, neighbor);
-      }
-    }
-
-    this.push(path);
-
+  passThrough._transform = function (obj, encoding, done) {
+    graph.addVertex(obj.key, obj.value);
+    //this.push(null);
     done();
   };
 
-
-  passThrough
-    .on('end', function () {
-      console.log('passThrough end:', arguments);
-    })
-    .on('error', function (err){
-      console.log('passThrough err: ',err);
-    });
+  passThrough._flush = function(done) {
+    var path = graph.shortestPath(start, finish).concat([start]).reverse()
+    this.push(path);
+    this.emit('end', path);
+    done();
+  }
 
   return passThrough;
 
 }
-
-
-/**
- * Basic priority queue implementation. If a better priority queue is wanted/needed,
- * this code works with the implementation in google's closure library (https://code.google.com/p/closure-library/).
- * Use goog.require('goog.structs.PriorityQueue'); and new goog.structs.PriorityQueue()
- *
-function PriorityQueue () {
-  this._nodes = [];
-
-  this.enqueue = function (priority, key) {
-    this._nodes.push({key: key, priority: priority });
-    this.sort();
-  }
-  this.dequeue = function () {
-    return this._nodes.shift().key;
-  }
-  this.sort = function () {
-    this._nodes.sort(function (a, b) {
-      return a.priority - b.priority;
-    });
-  }
-  this.isEmpty = function () {
-    return !this._nodes.length;
-  }
-}
-
-/**
- * Pathfinding starts here
- *
-function Graph(){
-  var INFINITY = 1/0;
-  this.vertices = {};
-
-  this.addVertex = function(name, edges){
-    this.vertices[name] = edges;
-  }
-
-  this.shortestPath = function (start, finish) {
-    var nodes = new PriorityQueue(),
-        distances = {},
-        previous = {},
-        path = [],
-        smallest, vertex, neighbor, alt;
-
-    for(vertex in this.vertices) {
-      if(vertex === start) {
-        distances[vertex] = 0;
-        nodes.enqueue(0, vertex);
-      }
-      else {
-        distances[vertex] = INFINITY;
-        nodes.enqueue(INFINITY, vertex);
-      }
-
-      previous[vertex] = null;
-    }
-
-    while(!nodes.isEmpty()) {
-      smallest = nodes.dequeue();
-
-      if(smallest === finish) {
-        path;
-
-        while(previous[smallest]) {
-          path.push(smallest);
-          smallest = previous[smallest];
-        }
-
-        break;
-      }
-
-      if(!smallest || distances[smallest] === INFINITY){
-        continue;
-      }
-
-      for(neighbor in this.vertices[smallest]) {
-        alt = distances[smallest] + this.vertices[smallest][neighbor];
-
-        if(alt < distances[neighbor]) {
-          distances[neighbor] = alt;
-          previous[neighbor] = smallest;
-
-          nodes.enqueue(alt, neighbor);
-        }
-      }
-    }
-
-    return path;
-  }
-}
-
-var g = new Graph();
-
-g.addVertex('A', {B: 7, C: 8});
-g.addVertex('B', {A: 7, F: 2});
-g.addVertex('C', {A: 8, F: 6, G: 4});
-g.addVertex('D', {F: 8});
-g.addVertex('E', {H: 1});
-g.addVertex('F', {B: 2, C: 6, D: 8, G: 9, H: 3});
-g.addVertex('G', {C: 4, F: 9});
-g.addVertex('H', {E: 1, F: 3});
-
-// Log test, with the addition of reversing the path and prepending the first node so it's more readable
-console.log(g.shortestPath('A', 'H').concat(['A']).reverse());
-*/

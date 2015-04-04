@@ -73,6 +73,7 @@ describe('api', function(){
     });
 
     it('should list the maps', function () {
+      this.timeout(5000);
       return inject({ method: "GET", url: "/api/maps"})
         .then(function (response) {
           response.statusCode.should.eql(200);
@@ -80,7 +81,8 @@ describe('api', function(){
     });
 
     it('should with name of the point of origin, destination point name, autonomy truck (km / l) and the value of a liter of fuel', function () {
-      return inject({ method: "POST", url: "/api/dijkstras", payload: {from: 'A', to: 'D', value: 2.50 } })
+      this.timeout(5000);
+      return inject({ method: "POST", url: "/api/dijkstras", payload: {from: 'ah', to: 'hvl', value: 2.50 } })
         .then(function (response) {
           response.statusCode.should.eql(200);
         });

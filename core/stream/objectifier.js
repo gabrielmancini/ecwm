@@ -19,13 +19,5 @@ module.exports = function (delimiter) {
 
   };
 
-  objectifier
-    .on('end', function () {
-      console.log('objectifier end:', arguments);
-    })
-    .on('error', function (err){
-      console.log('objectifier err: ',err);
-    });
-
   return objectifier;
 }

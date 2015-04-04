@@ -17,15 +17,6 @@ module.exports = function (model, attrs, base) {
     done();
   };
 
-
-  transform
-    .on('end', function () {
-      console.log('transform end:', arguments);
-    })
-    .on('error', function (err){
-      console.log('transform err: ',err);
-    });
-
   return transform;
 
 }

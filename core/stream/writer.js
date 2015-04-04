@@ -17,7 +17,7 @@ module.exports = function (env_config) {
       var db = nano.use(env_config.db);
       db.bulk({docs: toSend} , function(err, data) {
         written += toSend.length;
-        console.log("Written", toSend.length, " (",written,")");
+        //console.log("Written", toSend.length, " (",written,")");
         callback();
       });
     } else {
@@ -45,14 +45,6 @@ module.exports = function (env_config) {
       done();
     })
   }
-
-  writer
-    .on('end', function () {
-      console.log('writer end:', arguments);
-    })
-    .on('error', function (err){
-      console.log('writer err: ',err);
-    });
 
   return writer;
 }

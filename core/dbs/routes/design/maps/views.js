@@ -52,7 +52,15 @@ module.exports = {
       }
     },
     reduce: function (key, value, rereduce) {
-      return value;
+      if (!rereduce) {
+        return value;
+      } else {
+        return  value
+          .reduce(function (a, c) {
+            a = a.concat(c);
+            return a;
+          }, []);
+      }
     }
   },
 }

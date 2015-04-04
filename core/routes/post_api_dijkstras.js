@@ -20,19 +20,19 @@ module.exports = function (env_config) {
       var payload = request.payload;
       var routedb = nano.use('routes');
 
-      var outgoingWrap = new stream.PassThrough().wrap(routedb.view('maps', 'outgoing', { group: true }));
+      var outgoingWrap = new stream.Readable( { objectMode: true } )
+        .wrap(routedb.view('maps', 'outgoing', { group: true }));
+      var dijkstrasifier =  dijkstras(payload.from, payload.to);
+      var jSONStreamParser = JSONStream.parse(['rows', true]);
 
 
-      var objectifier = new stream.PassThrough()
-        .pipe(outgoingWrap)
-        .pipe(JSONStream.parse(['rows', true]))
-        .pipe(dijkstras(payload.from, payload.to))
-        .pipe(JSONStream.stringify());
+      outgoingWrap
+        .pipe(jSONStreamParser)
+        .pipe(dijkstrasifier);
 
-      objectifier.on('end', function() {
-        console.log(arguments)
-        reply(arguments);
-      })
+      dijkstrasifier.on('end', function(path) {
+        reply(path);
+      });
     }
   };
 
