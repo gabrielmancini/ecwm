@@ -19,6 +19,7 @@ var argv = require('optimist')
 
 app.start(argv, function (err) {
   if (err) {
+    console.log(err);
     process.exit(1);
   }
   // line break before logs
