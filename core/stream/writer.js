@@ -1,6 +1,6 @@
 var stream = require('stream'),
   Nano = require('nano'),
-  BUFFER_MAX_SIZE = 50;
+  BUFFER_MAX_SIZE = 500;
 
 module.exports = function (env_config) {
   var buffer = [ ],
