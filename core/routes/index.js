@@ -29,6 +29,7 @@ module.exports = function (env_config) {
         },
       },
       handler: function handler(request, reply) {
+        console.log('chegou')
         var payload = request.payload;
         var parameter = JSON.parse(payload.parameter);
         if (!(parameter && parameter.file)) {
@@ -43,9 +44,8 @@ module.exports = function (env_config) {
         var attrs = ['from', 'to', 'km'];
 
         if (file) {
+          console.log(file)
           file
-//            .pipe(Stream.liner('\n'))
-//            .pipe(Stream.objectifier(' '))
             .pipe(Stream.parser())
             .pipe(Stream.transform(Model.Models.Route, attrs, base))
             .pipe(Stream.validate(Model.Models.Route))

@@ -20,7 +20,7 @@ var _ = require('lodash');
 
 
 
-module.exports.follow = function (from, to, cb) {
+module.exports.follow = function (from, to, callback) {
 
 
   var getFrom = function(obj, db, id, cb) {
@@ -77,10 +77,6 @@ module.exports.follow = function (from, to, cb) {
     })
   }
 
-  var flux = function (original, obj) {
-
-  }
-
 
   var feed = from.follow({since: "now"});
   feed.on('error', function (err) {
@@ -106,7 +102,7 @@ module.exports.follow = function (from, to, cb) {
   });
   feed.follow();
 
-  return feed;
-  cb()
+  callback(null, feed);
+
 }
 module.exports.dbs = ['routes', 'graph'];
