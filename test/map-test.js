@@ -16,58 +16,60 @@ com nome do ponto de origem, nome do ponto de destino, autonomia do caminhão (k
 */
 require('should');
 var fs = require('fs');
-var Promise = require("bluebird"),
-    app = require('../lib');
-var server;
-app.start({'custom-ports': '6001,6003' }, function (err, _app) {
-  server = _app.server;
-});
-
-var fixture = []
-
-fs.readdir(__dirname + '/fixture', function (err, files) {
-
-  files.forEach(function (file) {
-    fs.readFile(__dirname + '/fixture/' + file, 'utf8', function (err, data) {
-      if (err) throw err;
-      fixture.push({name: file, routes: data});
-    });
-  })
-
-})
-
-console.log(fixture)
+var Promise = require("bluebird")
+var http        = require('http');
 
 function inject (options) {
-    return new Promise(function (resolve, reject) {
-        server.inject(options, resolve);
-    });
+  options.port = '6001';
+  options.host = 'localhost'
+  return new Promise(function (resolve, reject) {
+    return http.request(options, resolve);
+  });
 }
 
 
 
 describe('api', function(){
 
-
-    it('should have this route get', function () {
-        return inject({ method: "GET", url: "/api/maps"}).then(function (response) {
+    it('should have this route get', function (done) {
+        return inject({ method: "GET", url: "/"}).then(function (response) {
+          console.log(response)
           response.statusCode.should.eql(200);
+          done()
         });
     });
 
 
-    it('should have this route post', function () {
+    it('should have this route post', function (done) {
         return inject({ method: "POST", url: "/api/maps"}).then(function (response) {
           response.statusCode.should.eql(500);
+          done()
         });
+    });
+
+    it('To popular database with a WebService', function (done) {
+
+      var options     = require('url').parse('/api/maps');
+      options.method  = 'POST';
+      options.payload = {
+        parameter:'{"file": "file"}'
+      }
+
+      var req = http.request(options, function(response) {
+        response.statusCode.should.eql(200);
+        done();
+      });
+
+      require('fs').createReadStream('./fixture/map1.tsv').pipe(req);
     });
 
     it('To popular database with a WebService', function () {
+
         return inject({ method: "POST", url: "/api/maps", payload: fixture[0] }).then(function (response) {
             response.statusCode.should.eql(200);
         });
     });
-
+//curl -F file=@test/fixture/map1.tsv -F parameter='{"file": "file"}'  http://localhost:6001/api/maps
 
 /*
 - Must accept logistics network with the NAME MAP in WebService
@@ -84,5 +86,3 @@ with name of the point of origin, destination point name, autonomy truck (km / l
 */
 
 });
-
-

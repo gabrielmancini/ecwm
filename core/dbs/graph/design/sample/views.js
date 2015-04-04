@@ -7,9 +7,7 @@ module.exports = {
       }
     },
     reduce: function (key, value, rereduce) {
-      if (!rereduce) {
-        return value;
-      }
+      return value;
     }
   },
   incoming: {
@@ -19,7 +17,6 @@ module.exports = {
       }
     },
     reduce: function (key, value, rereduce) {
-      if (!rereduce)
         return value;
     }
   }

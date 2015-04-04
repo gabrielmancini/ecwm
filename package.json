@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^0.9.0",
+    "couchr": "0.0.16",
     "csv-streamify": "^1.0.0",
     "fast-csv": "^0.6.0",
     "hapi": "^8.4.0",
@@ -28,6 +29,13 @@
     "tv4": "^1.1.9"
   },
   "devDependencies": {
+    "bluebird": "^2.9.24",
+    "grunt": "^0.4.5",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-simple-mocha": "^0.4.0",
+    "load-grunt-tasks": "^3.1.0",
+    "mocha": "^2.2.1",
+    "rimraf": "^2.3.2",
     "should": "^5.2.0"
   }
 }

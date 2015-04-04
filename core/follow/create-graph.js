@@ -15,53 +15,92 @@
 }
 */
 var async = require('async');
+var _ = require('lodash');
 
 
-var insertDoc = function (db, doc, origin, cb) {
-  db.head(doc._id , function(err, _, headers) {
-    if (err && err.statusCode === 404) {
-      db.insert(doc, function (_err, body) {
-        cb(_err, body);
-      })
-    } else {
-      var result = {};
-      result[origin]={id: doc._id};
-      cb(null, result);
-    }
-  });
-}
+
 
 module.exports.follow = function (from, to, cb) {
 
+
+  var getFrom = function(obj, db, id, cb) {
+
+    db.get(id, function (err, body) {
+      delete body._id;
+      delete body._rev;
+      _.extend(obj, body);
+      cb(err, body);
+    })
+  }
+
+  var trasform = function (obj, cb) {
+    _.extend(obj, {
+        type: 'node',
+        _id: obj.from,
+        edge: [{ _id: obj.to, km: obj.km }]
+      });
+    delete obj.to;
+    delete obj.km;
+    cb();
+  }
+
+  var getTo = function (obj, db, cb) {
+    db.get(obj._id , function(err, body) {
+      debugger;
+      if (err && err.statusCode === 404) {
+        cb(null, body);
+      } else if (err && err.statusCode !== 404) {
+        cb(err, body);
+      } else {
+        body.edge.push(obj.edge[0]);
+        _.extend(obj, body);
+        cb(null, body);
+      }
+    })
+  }
+
+  var insertNode = function (obj, db, cb) {
+    db.insert(obj, function (_err, body) {
+      cb(_err, body);
+    })
+  }
+
+  var insertVertex = function (obj, db, cb) {
+    var link = {
+      type: 'link',
+      from: obj._id,
+      to: obj.edge[0]._id,
+      km: obj.edge[0].km
+    }
+    to.insert(link, function(err, body) {
+      cb(err, body)
+    })
+  }
+
+  var flux = function (original, obj) {
+
+  }
+
+
   var feed = from.follow({since: "now"});
+  feed.on('error', function (err) {
+    console.error('Since Follow always retries on errors, this must be serious', err);
+    throw err;
+  })
+
   feed.on('change', function (change) {
-
-    from.get(change.id, function (err, body) {
-
-      var fromPlace = {
-        type: 'place',
-        _id: body.from
-      };
-      var toPlace = {
-        type: 'place',
-        _id: body.to
-      };
-
-      async.parallel({
-        from: async.apply(insertDoc, to, fromPlace, 'from'),
-        to: async.apply(insertDoc, to, toPlace, 'to')
-      }, function (err, result) {
-        var link = {
-          type: 'link',
-          from: body.from,
-          to: body.to,
-          km: body.km
-        }
-        to.insert(link, function(err) {
-          if (err) console.log('error on link:', err);
-        })
-      })
-
+    var obj = {};
+    feed.pause();
+    async.series([
+      async.apply(getFrom, obj, from, change.id),
+      async.apply(trasform, obj),
+      async.apply(insertVertex, obj, to),
+      async.apply(getTo, obj, to),
+      async.apply(insertNode, obj, to),
+    ],
+    function(err) {
+      if (err) console.log('error on link:', err);
+      feed.resume();
     })
 
   });

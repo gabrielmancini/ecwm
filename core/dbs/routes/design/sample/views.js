@@ -1,13 +1,26 @@
 module.exports = {
+  autocomplete_from: {
+    map: function(doc) {
+      if (doc.type === 'route') {
+        emit(doc.from, {_id: doc.from, km: doc.km});
+      }
+    }
+  },
+  autocomplete_to: {
+    map: function(doc) {
+      if (doc.type === 'route') {
+        emit(doc.to, {_id: doc.to, km: doc.km});
+      }
+    }
+  },
   outgoing: {
     map: function(doc) {
       if (doc.type === 'route') {
-
         emit(doc.from, {_id: doc.to, km: doc.km});
       }
     },
     reduce: function (key, value, rereduce) {
-        return value;
+      return value;
     }
   },
   incoming: {
@@ -17,8 +30,18 @@ module.exports = {
       }
     },
     reduce: function (key, value, rereduce) {
-      if (!rereduce)
-        return value;
+      return value;
     }
-  }
+  },
+  outgoing: {
+    map: function(doc) {
+      if (doc.type === 'route') {
+        emit(doc.from, {_id: doc.to, km: doc.km});
+      }
+    },
+    reduce: function (key, value, rereduce) {
+      return value;
+    }
+  },
 }
+
