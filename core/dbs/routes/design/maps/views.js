@@ -33,10 +33,10 @@ module.exports = {
       return value;
     }
   },
-  outgoing: {
+  by_origin: {
     map: function(doc) {
       if (doc.type === 'route') {
-        emit(doc.from, {_id: doc.to, km: doc.km});
+        emit(doc.origin, doc);
       }
     },
     reduce: function (key, value, rereduce) {

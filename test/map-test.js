@@ -38,8 +38,8 @@ describe('api', function(){
       });
     })
 
-    after(function(done) {
-      setInterval(done, 1900);
+    after(function() {
+      //setInterval(done, 1900);
     })
 
     it('should have this route get', function () {
@@ -64,16 +64,23 @@ describe('api', function(){
 
       request.post('/api/maps')
         .field('parameter', '{"file": "file"}')
-        .attach('file',  __dirname + '/fixture/map1.tsv')
+        .attach('file',  __dirname + '/fixture/map_pequeno.tsv')
         .end(function(err, response) {
             response.statusCode.should.eql(200);
-            done()
+            setTimeout(done, 1000);
         });
 
     });
 
     it('should list the maps', function () {
       return inject({ method: "GET", url: "/api/maps"})
+        .then(function (response) {
+          response.statusCode.should.eql(200);
+        });
+    });
+
+    it('should with name of the point of origin, destination point name, autonomy truck (km / l) and the value of a liter of fuel', function () {
+      return inject({ method: "POST", url: "/api/dijkstras", payload: {from: 'A', to: 'D', value: 2.50 } })
         .then(function (response) {
           response.statusCode.should.eql(200);
         });
