@@ -4,6 +4,7 @@
   angular
     .module('app', [
       'ngMaterial',
+      'ui.grid',
       'ngRoute',
       'angularFileUpload',
       'app.module'

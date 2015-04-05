@@ -23,6 +23,10 @@
     var vm = this;
 
     vm.files = [];
+    vm.columnDefs = [
+      { name:'file', field: 'key' },
+      { name:'rows', field: 'value' }
+    ];
 
     activate();
 

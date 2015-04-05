@@ -63,21 +63,12 @@ module.exports = {
     }
   },
   by_origin: {
-    map: function(doc) {
+    map: function (doc) {
       if (doc.type === 'route') {
-        emit(doc.origin, doc);
+        emit(doc.origin, 1);
       }
     },
-    reduce: function (key, value, rereduce) {
-      if (!rereduce) {
-        return value;
-      } else {
-        return  value
-          .reduce(function (a, c) {
-            return a.concat(c);
-          }, []);
-      }
-    }
+    reduce: '_count'
   },
 }
 

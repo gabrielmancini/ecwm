@@ -31,7 +31,7 @@
           .catch(getFilesFailed);
 
       function getFilesComplete(response) {
-          return response.data.results;
+          return response.data.rows || [];
       }
 
       function getFilesFailed(error) {

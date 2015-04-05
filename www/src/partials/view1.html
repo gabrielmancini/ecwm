@@ -6,32 +6,9 @@
     </h2>
   </div>
   </md-toolbar>
-  <md-content layout="row" layout-fill>
-    <div flex='10'>
+  <md-content layout-fill>
 
-
-    </div>
-    <div flex='80'>
-
-      <md-content>
-
-        <md-list>
-          <md-subheader class="md-no-sticky">{{vm.files.length}}</md-subheader>
-          <md-item class="md-3-line" ng-repeat="item in vm.files">
-            <div class="md-item-text">
-              <h3>{{ item.origin }}</h3>
-              <h4>{{ item.value.length }}</h4>
-            </div>
-          </md-item>
-        </md-list>
-
-      </md-content>
-
-
-    </div>
-    <div flex='10'>
-
-    </div>
+    <div id="grid1" ui-grid="{ data: vm.files, columnDefs: vm.columnDefs }" class="grid"></div>
 
   </md-content>
 
