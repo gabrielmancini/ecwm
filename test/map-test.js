@@ -16,7 +16,7 @@ com nome do ponto de origem, nome do ponto de destino, autonomia do caminhão (k
 */
 require('should');
 var fs = require('fs');
-var Promise = require("bluebird");
+var Promise = require('bluebird');
 var app = require('../lib');
 var http = require('http');
 var server;
@@ -57,7 +57,7 @@ describe('api', function(){
         });
     });
 
-    xit('To popular database with a WebService', function (done) {
+    it('To popular database with a WebService', function (done) {
       this.timeout(50000);
       var supertest = require('supertest');
       var request = supertest('127.0.0.1:6001');

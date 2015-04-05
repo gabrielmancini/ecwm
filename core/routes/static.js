@@ -6,7 +6,8 @@ module.exports = function (env_config) {
     path: '/{param*}',
     handler: {
         directory: {
-            path: env_config.maps.www_path
+            path: env_config.maps.www_path,
+            listing: true
         }
     }
   };

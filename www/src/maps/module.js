@@ -2,8 +2,7 @@
   'use strict';
 
   angular
-    .module('app.module', [
-        'module.maps'
+    .module('module.maps', [
   ]);
 
 })();
