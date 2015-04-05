@@ -8,6 +8,8 @@ var JSONStream = require('JSONStream');
 
 module.exports = function (env_config) {
   var nano = Nano( { url: env_config.couch.url } );
+  var routedb = nano.use('routes');
+
   return {
     method: 'POST',
     path: '/api/dijkstras',
@@ -18,7 +20,6 @@ module.exports = function (env_config) {
     },
     handler: function handler(request, reply) {
       var payload = request.payload;
-      var routedb = nano.use('routes');
 
       var outgoingWrap = new stream.Readable( { objectMode: true } )
         .wrap(routedb.view('maps', 'outgoing', { group: true }));

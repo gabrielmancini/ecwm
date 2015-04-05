@@ -3,9 +3,11 @@
  */
 var Model = require('../models');
 var Stream = require('../stream');
+var Nano = require('nano');
 
 module.exports = function (env_config) {
-
+  var nano = Nano( { url: env_config.couch.url } );
+  var routedb = nano.use('routes');
   return {
     method: 'POST',
     path: '/api/maps',

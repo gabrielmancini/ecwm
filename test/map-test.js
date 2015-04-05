@@ -57,23 +57,23 @@ describe('api', function(){
         });
     });
 
-    it('To popular database with a WebService', function (done) {
-
+    xit('To popular database with a WebService', function (done) {
+      this.timeout(50000);
       var supertest = require('supertest');
       var request = supertest('127.0.0.1:6001');
 
       request.post('/api/maps')
         .field('parameter', '{"file": "file"}')
-        .attach('file',  __dirname + '/fixture/map1.tsv')
+        .attach('file',  __dirname + '/fixture/map_grande.tsv')
         .end(function(err, response) {
             response.statusCode.should.eql(200);
-            setTimeout(done, 1000);
+            setTimeout(done, 20000);
         });
 
     });
 
     it('should list the maps', function () {
-      this.timeout(5000);
+      this.timeout(500000);
       return inject({ method: "GET", url: "/api/maps"})
         .then(function (response) {
           response.statusCode.should.eql(200);
@@ -81,9 +81,10 @@ describe('api', function(){
     });
 
     it('should with name of the point of origin, destination point name, autonomy truck (km / l) and the value of a liter of fuel', function () {
-      this.timeout(5000);
+      this.timeout(500000);
       return inject({ method: "POST", url: "/api/dijkstras", payload: {from: 'ah', to: 'hvl', value: 2.50 } })
         .then(function (response) {
+          console.log(response.result)
           response.statusCode.should.eql(200);
         });
     });

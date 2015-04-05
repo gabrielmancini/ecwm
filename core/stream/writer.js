@@ -7,6 +7,7 @@ module.exports = function (env_config) {
   written = 0;
   var writer = new stream.Transform( { objectMode: true } );
   var nano = Nano( { url: env_config.couch.url } );
+  var db = nano.use(env_config.db);
 
   // write the contents of the buffer to CouchDB in blocks of 500
   var processBuffer = function(flush, callback) {
@@ -14,10 +15,9 @@ module.exports = function (env_config) {
     if(flush || buffer.length>= BUFFER_MAX_SIZE) {
       var toSend = buffer.splice(0, buffer.length);
       buffer = [];
-      var db = nano.use(env_config.db);
       db.bulk({docs: toSend} , function(err, data) {
         written += toSend.length;
-        //console.log("Written", toSend.length, " (",written,")");
+        console.log("Written", toSend.length, " (",written,")");
         callback();
       });
     } else {
@@ -42,7 +42,9 @@ module.exports = function (env_config) {
   // called when we need to flush everything
   writer._flush = function(done) {
     processBuffer(true, function() {
-      done();
+      nano.db.compact(env_config.db, function() {
+        done()
+      });
     })
   }
 

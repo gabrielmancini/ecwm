@@ -13,6 +13,28 @@ module.exports = {
       }
     }
   },
+  //outgoing: {
+  //  map: function(doc) {
+  //    if (doc.type === 'route') {
+  //      emit(doc.from, {_id: doc.to, km: doc.km});
+  //    }
+  //  },
+  //  reduce: function (key, value, rereduce) {
+  //    if (!rereduce) {
+  //      return  value
+  //        .reduce(function (a, c) {
+  //          a[c._id] = c.km;
+  //          return a;
+  //        }, {});
+  //    } else {
+  //      return value
+  //        .reduce(function (a, c) {
+  //          for (var attrname in c) { a[attrname] = c[attrname]; }
+  //          return a;
+  //        }, {});
+  //    }
+  //  }
+  //},
   outgoing: {
     map: function(doc) {
       if (doc.type === 'route') {
@@ -20,18 +42,13 @@ module.exports = {
       }
     },
     reduce: function (key, value, rereduce) {
-      if (!rereduce) {
+       if (!rereduce) {
+        return value;
+      } else {
         return  value
           .reduce(function (a, c) {
-            a[c._id] = c.km;
-            return a;
-          }, {});
-      } else {
-        return value
-          .reduce(function (a, c) {
-            for (var attrname in c) { a[attrname] = c[attrname]; }
-            return a;
-          }, {});
+            return a.concat(c);
+          }, []);
       }
     }
   },
@@ -57,8 +74,7 @@ module.exports = {
       } else {
         return  value
           .reduce(function (a, c) {
-            a = a.concat(c);
-            return a;
+            return a.concat(c);
           }, []);
       }
     }

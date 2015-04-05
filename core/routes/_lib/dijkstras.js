@@ -16,7 +16,11 @@ module.exports = function (start, finish) {
       path.push(start);
 
   passThrough._transform = function (obj, encoding, done) {
-    graph.addVertex(obj.key, obj.value);
+
+    graph.addVertex(obj.key, obj.value.reduce(function (a, c) {
+        a[c._id] = c.km;
+        return a;
+      }, {}));
     //this.push(null);
     done();
   };
