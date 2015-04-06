@@ -64,7 +64,7 @@ describe('api', function(){
 
       request.post('/api/maps')
         .field('parameter', '{"file": "file"}')
-        .attach('file',  __dirname + '/fixture/map_grande.tsv')
+        .attach('file',  __dirname + '/fixture/map1.tsv')
         .end(function(err, response) {
             response.statusCode.should.eql(200);
             setTimeout(done, 20000);

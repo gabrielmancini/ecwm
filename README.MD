@@ -3,10 +3,20 @@
 
 Install couchdb
 http://couchdb.apache.org/
-
 you dont need start couchdb, the project start him with some others configurations
 
-to populate:
+
+clone the repo in some where
+```
+git clone git@github.com:gabrielmancini/ecwm.git && cd ecwm
+```
+
+```
+npm install && bower install
+```
+
+
+to run:
 
 ```
 npm start
