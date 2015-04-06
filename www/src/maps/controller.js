@@ -56,7 +56,8 @@
 
     vm.findPath = findPath;
     vm.way = '';
-    vm.mkl = 2.50;
+    vm.kml = 2.50;
+    vm.akml = 10;
     activate();
 
     //-----------------------------------------------------
@@ -73,16 +74,20 @@
 
       return mapService.getPath(origin, destiny)
         .then(function(data) {
-          var distance = data.reduce(function (a, c) {
-            return { priority: (a.priority + c.priority) };
-          }, {priority: 0}).priority;
+          if (data.length > 0) {
+            var distance = data.reduce(function (a, c) {
+              return { value: (a.value + c.value) };
+            }, {value: 0}).value;
 
-          var path = data.reduce(function (a, c) {
-            a.push(c.key);
-            return a;
-          }, []);
+            var path = data.reduce(function (a, c) {
+              a.push(c.key.pop());
+              return a;
+            }, [data[0].key ]);
 
-          vm.way = path.join(' >> ') + ' on of cost: R$ ' + (distance / vm.mkl) ;
+            vm.way = path.join(' >> ') + ' in distance of ' + distance + 'km on cost total of: R$ ' + (distance * vm.kml) + ' and cost per km is: ' + (distance * vm.kml) / vm.akml ;
+          } else {
+            vm.way = 'caminho nao encontrado!'
+          }
           if (!$scope.$$phase) $scope.$apply();
         return data;
       });

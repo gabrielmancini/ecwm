@@ -32,7 +32,16 @@ module.exports = function (env_config) {
         .pipe(dijkstrasifier);
 
       dijkstrasifier.on('end', function(path) {
-        reply(path);
+
+        var keys = [];
+        path.reduce(function (a, c) {
+          keys.push([a, c]);
+          return c;
+        });
+        routedb.view('maps', 'kms', { keys: keys }, function (err, data) {
+          if (err) return reply('Error');
+          reply(data.rows || []);
+        });
       });
     }
   };

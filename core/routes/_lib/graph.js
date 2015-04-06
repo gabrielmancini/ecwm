@@ -11,7 +11,7 @@ function PriorityQueue () {
     this.sort();
   }
   this.dequeue = function () {
-    return this._nodes.shift();
+    return this._nodes.shift().key;
   }
   this.sort = function () {
     this._nodes.sort(function (a, b) {
@@ -57,27 +57,27 @@ function Graph(){
     while(!nodes.isEmpty()) {
       smallest = nodes.dequeue();
 
-      if(smallest.key === finish) {
+      if(smallest === finish) {
         path;
 
-        while(previous[smallest.key]) {
+        while(previous[smallest]) {
           path.push(smallest);
-          smallest.key = previous[smallest.key];
+          smallest = previous[smallest];
         }
 
         break;
       }
 
-      if(!smallest.key || distances[smallest.key] === INFINITY){
+      if(!smallest || distances[smallest] === INFINITY){
         continue;
       }
 
-      for(neighbor in this.vertices[smallest.key]) {
-        alt = distances[smallest.key] + this.vertices[smallest.key][neighbor];
+      for(neighbor in this.vertices[smallest]) {
+        alt = distances[smallest] + this.vertices[smallest][neighbor];
 
         if(alt < distances[neighbor]) {
           distances[neighbor] = alt;
-          previous[neighbor] = smallest.key;
+          previous[neighbor] = smallest;
 
           nodes.enqueue(alt, neighbor);
         }

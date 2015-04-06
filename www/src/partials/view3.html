@@ -20,6 +20,7 @@
 
   <form ng-submit="$event.preventDefault()">
  ex: 'ah'
+
       <md-autocomplete id="from"
           ng-disabled="vm.origin.isDisabled"
           md-no-cache="true"
@@ -46,8 +47,12 @@
       <br/>
 
       <md-input-container>
-        <label>Km/l</label>
-        <input ng-model="vm.mkl">
+        <label>Autonomia Km/l</label>
+        <input ng-model="vm.akml">
+      </md-input-container>
+      <md-input-container>
+        <label>Valor Km/l</label>
+        <input ng-model="vm.kml">
       </md-input-container>
       <md-button ng-click='vm.findPath()' class="md-raised">Buscar</md-button>
 

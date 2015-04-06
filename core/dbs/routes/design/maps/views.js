@@ -15,6 +15,13 @@ module.exports = {
     },
     reduce: '_count'
   },
+  kms: {
+    map: function (doc) {
+      if (doc.type === 'route') {
+        emit([doc.from, doc.to],  doc.km)
+      }
+    }
+  },
   //outgoing: {
   //  map: function(doc) {
   //    if (doc.type === 'route') {
