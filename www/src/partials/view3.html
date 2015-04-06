@@ -19,7 +19,7 @@
   <md-content layout-fill>
 
   <form ng-submit="$event.preventDefault()">
-
+ ex: 'ah'
       <md-autocomplete id="from"
           ng-disabled="vm.origin.isDisabled"
           md-no-cache="true"
@@ -29,10 +29,10 @@
           md-item-text="item.key"
           placeholder="origin">
         <span md-highlight-text="vm.origin.searchText" md-highlight-flags="^i">{{item.key}}</span>
-      </md-autocomplete> ex: 'ah'
+      </md-autocomplete>
       <br/>
 
-
+ ex: 'hvl'
       <md-autocomplete id="to"
           ng-disabled="vm.destiny.isDisabled"
           md-no-cache="true"
@@ -42,7 +42,7 @@
           md-item-text="item.key"
           placeholder="destiny">
         <span md-highlight-text="vm.destiny.searchText" md-highlight-flags="^i">{{item.key}}</span>
-      </md-autocomplete> ex: 'hvl'
+      </md-autocomplete>
       <br/>
 
       <md-input-container>
@@ -51,7 +51,7 @@
       </md-input-container>
       <md-button ng-click='vm.findPath()' class="md-raised">Buscar</md-button>
 
-      <label md-highlight-text="path">Caminho:</label>{{vm.way}}
+      <label md-highlight-text="path">Caminho: </label>{{vm.way}}
 
 
   </form>

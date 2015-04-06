@@ -26,7 +26,7 @@ module.exports = function (start, finish) {
   };
 
   passThrough._flush = function(done) {
-    var path = graph.shortestPath(start, finish).concat([start]).reverse()
+    var path = graph.shortestPath(start, finish).concat([{key: start, priority: 0}]).reverse()
     this.push(path);
     this.emit('end', path);
     done();

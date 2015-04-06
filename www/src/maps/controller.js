@@ -56,7 +56,7 @@
 
     vm.findPath = findPath;
     vm.way = '';
-
+    vm.mkl = 2.50;
     activate();
 
     //-----------------------------------------------------
@@ -73,8 +73,16 @@
 
       return mapService.getPath(origin, destiny)
         .then(function(data) {
-          vm.way = 'path:' + data.join(' -> ');
-          console.log(vm.way);
+          var distance = data.reduce(function (a, c) {
+            return { priority: (a.priority + c.priority) };
+          }, {priority: 0}).priority;
+
+          var path = data.reduce(function (a, c) {
+            a.push(c.key);
+            return a;
+          }, []);
+
+          vm.way = path.join(' >> ') + ' on of cost: R$ ' + (distance / vm.mkl) ;
           if (!$scope.$$phase) $scope.$apply();
         return data;
       });
