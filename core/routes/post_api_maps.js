@@ -26,11 +26,10 @@ module.exports = function (env_config) {
         return reply('parameter json not found: parameter={"file": "fileInput"} where fileInput is as input multipart/form-data' );
       }
       file = payload[parameter.file];
-
       var base = {
         type: 'route',
-        origin: parameter.file
-      }
+        origin: payload[parameter.file].hapi.filename || parameter.file
+      };
       var attrs = ['from', 'to', 'km'];
 
       if (file) {

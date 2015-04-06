@@ -1,17 +1,19 @@
 module.exports = {
   autocomplete_from: {
-    map: function(doc) {
+    map: function (doc) {
       if (doc.type === 'route') {
-        emit(doc.from, {_id: doc.from, km: doc.km});
+        emit(doc.from, doc.km);
       }
-    }
+    },
+    reduce: '_count'
   },
   autocomplete_to: {
     map: function(doc) {
       if (doc.type === 'route') {
-        emit(doc.to, {_id: doc.to, km: doc.km});
+        emit(doc.to, doc.km);
       }
-    }
+    },
+    reduce: '_count'
   },
   //outgoing: {
   //  map: function(doc) {

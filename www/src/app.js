@@ -32,7 +32,7 @@
             templateUrl: 'src/partials/view3.html',
             controller: 'MapController as vm'
           })
-          .otherwise({redirectTo: '/view1'});
+          .otherwise({redirectTo: '/view3'});
       }
     ])
     ;

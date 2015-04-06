@@ -22,7 +22,10 @@
   function Service($http, $log, $q) {
 
     return {
-        getFiles: getFiles
+        getFiles: getFiles,
+        getOrigins: getOrigins,
+        getDestinies: getDestinies,
+        getPath: getPath
     };
 
     function getFiles() {
@@ -39,6 +42,34 @@
       }
     }
 
+    function getOrigins(query) {
+      return $http.get('/api/from?q=' + query)
+          .then(getOriginsComplete)
+          .catch(getOriginsFailed);
+
+      function getOriginsComplete(response) {
+          return response.data.rows || [];
+      }
+
+      function getOriginsFailed(error) {
+          $log.error('XHR Failed for getFiles.' + error.data);
+      }
+    }
+
+    function getDestinies(query) {
+      return $http.get('/api/to?q=' + query)
+          .then(getDestiniesComplete)
+          .catch(getDestiniesFailed);
+
+      function getDestiniesComplete(response) {
+          return response.data.rows || [];
+      }
+
+      function getDestiniesFailed(error) {
+          $log.error('XHR Failed for getFiles.' + error.data);
+      }
+    }
+
 
     function getPath(start, final) {
       return $http.post('/api/dijkstras',  {from: start, to: final})
@@ -46,7 +77,7 @@
           .catch(getPathFailed);
 
       function getPathComplete(response) {
-          return response.data.results;
+          return response.data;
       }
 
       function getPathFailed(error) {

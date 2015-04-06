@@ -16,29 +16,14 @@
       </md-button>
     </div>
   </md-toolbar>
-  <md-content layout="row"  layout-margin layout-fill layout-padding>
-    <div flex='10'>
+  <md-content layout-fill>
 
-
-    </div>
-    <div flex='80'>
-
-      <md-content class="md-padding">
-
-      <input type="file" nv-file-select uploader="uploader"/><br/>
-        <ul>
-            <li ng-repeat="item in uploader.queue">
-                Name: <span ng-bind="item.file.name"></span><br/>
-                <button ng-click="item.upload()">upload</button>
-            </li>
-        </ul>
-
-      </md-content>
-
-
-    </div>
-    <div flex='10'>
-
-    </div>
+    <input type="file" nv-file-select uploader="vm.uploader"/><br/>
+      <ul>
+          <li ng-repeat="item in vm.uploader.queue">
+              Name: <span ng-bind="item.file.name"></span><br/>
+              <button ng-click="item.upload()">upload</button>
+          </li>
+      </ul>
 
   </md-content>

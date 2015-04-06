@@ -17,9 +17,13 @@
           '$scope',
           '$log',
           '$q',
+          '$timeout',
+          '$mdToast',
+          '$animate',
+          'FileUploader',
           'MapService'
         ];
-  function Controller($scope, $log, $q, mapService) {
+  function Controller($scope, $log, $q, $timeout, $mdToast, $animate, FileUploader, mapService) {
     var vm = this;
 
     vm.files = [];
@@ -27,12 +31,52 @@
       { name:'file', field: 'key' },
       { name:'rows', field: 'value' }
     ];
+    vm.uploader = new FileUploader({
+        url: '/api/maps',
+        formData: [{
+          parameter: JSON.stringify({file: 'file' })
+        }]
+    });
+
+    vm.origin = {
+      selectedItem  : null,
+      searchText    : null,
+      querySearch   : getOrigins,
+      simulateQuery : true,
+      isDisabled    : false,
+    };
+
+    vm.destiny = {
+      selectedItem  : null,
+      searchText    : null,
+      querySearch   : getDestinies,
+      simulateQuery : true,
+      isDisabled    : false,
+    };
+
+    vm.findPath = findPath;
+    vm.way = '';
 
     activate();
+
+    //-----------------------------------------------------
 
     function activate() {
       return getFiles().then(function() {
           $log.info('Activated Files View');
+      });
+    }
+
+    function findPath() {
+      var origin = (!!vm.origin.selectedItem) ? vm.origin.selectedItem.key : vm.origin.searchText;
+      var destiny = (!!vm.destiny.selectedItem) ? vm.destiny.selectedItem.key : vm.destiny.searchText;
+
+      return mapService.getPath(origin, destiny)
+        .then(function(data) {
+          vm.way = 'path:' + data.join(' -> ');
+          console.log(vm.way);
+          if (!$scope.$$phase) $scope.$apply();
+        return data;
       });
     }
 
@@ -43,6 +87,33 @@
             return vm.files;
       });
     }
+    function getOrigins(query) {
+          return mapService.getOrigins(query)
+              .then(function(data) {
+                return data;
+          });
+        }
+    function getDestinies(query) {
+          return mapService.getDestinies(query)
+              .then(function(data) {
+                return data;
+          });
+        }
+
+    vm.uploader.onAfterAddingFile = function(fileItem) {
+      vm.uploader.formData = [{
+        parameter: JSON.stringify({name: fileItem._file.name })
+      }];
+    };
+
+    vm.uploader.onBeforeUploadItem = function(item) {
+      $mdToast.show(
+        $mdToast.simple()
+          .content('Upload Concluido')
+          .position('top center')
+          .hideDelay(300)
+      );
+    };
 
   }
 
