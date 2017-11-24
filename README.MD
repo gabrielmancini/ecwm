@@ -42,3 +42,6 @@ curl -F file=@test/fixture/map1.tsv -F parameter='{"file": "file"}'  http://loca
 ```
 
 
+
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/gabrielmancini/ecwm.svg)](https://greenkeeper.io/)
